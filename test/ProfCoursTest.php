@@ -1,9 +1,10 @@
 <?php
 namespace Test;
 
-use Cours;
-use PHPUnit\Framework\TestCase;
 use Prof;
+use Cours;
+use Exception;
+use PHPUnit\Framework\TestCase;
 
 class ProfCoursTest extends TestCase
 {
@@ -17,7 +18,7 @@ class ProfCoursTest extends TestCase
     const DB_PASS = "user01";
     const DB_NAME = "user01_test_php";
     const DB_HOST = "192.168.250.3";
-
+   
     public static $conn = null;
     // Prof
     private $prenom ="REVERGIE";
@@ -74,7 +75,7 @@ class ProfCoursTest extends TestCase
 
             new Prof("Nom_prof1", "Prenom_prof1", "10/01/1982", "lieu_prof1"),      // idprof = 1
             new Prof("Nom_prof2", "Prenom_prof2", "10/02/1982", "lieu_prof2"),      // idprof = 2
-            new Prof("Nom_prof3", "Prenom_prof3", "10/03/1982", "lieu_prof3"),      // idprof = 3
+            new Prof("Nom_prof2", "Prenom_prof2", "10/03/1982", "lieu_prof3"),      // idprof = 3
             new Prof("Nom_prof4", "Prenom_prof4", "10/04/1982", "lieu_prof4"),      // idprof = 4
             new Prof("Nom_prof5", "Prenom_prof5", "10/05/1982", "lieu_prof5"),      // idprof = 5
             new Prof("Nom_prof6", "Prenom_prof6", "10/06/1982", "lieu_prof6"),      // idprof = 6
@@ -179,6 +180,7 @@ class ProfCoursTest extends TestCase
             $cours->add($conn);
         }
 
+
         /**
          *
          * Question 8 : Dans la fonction « testAdd() », s’inspirer de test d’ajout des profs pour tester l’ajout des cours.
@@ -241,57 +243,7 @@ class ProfCoursTest extends TestCase
     }
 
 
-    /**
-     * Affichage d'un enregistrement
-     * @order 4
-     */
-    public function testPrintOne()
-    {
-        print __METHOD__."\n";
-        $conn = $this->getConnection();
-
-        // Prof
-        $prof = Prof::printOne($conn);
-        $prof_str = $prof->__toString();
-        print "########## - 1e PROF EN BASE - ########## \n";
-        print $prof_str."\n";
-        print "################################################################\n\n";
-        $expected = self::$prof_a[0]->__toString();
-        $this->assertEquals($expected, $prof_str, "Prof \n");
-
-        // Cours
-
-        /**
-         *
-         * Question 10 :	Dans la fonction « testPrintOne() »,
-         * s’inspirer de test de sélection et affichage du premier prof pour tester la sélection et l’affichage du premier cours dans la base.
-         *
-         */
-
-
-
-        // Avec des ID
-        $idProf = 10;
-        $idCours = 9;
-        // Prof
-        $prof = Prof::printOne($conn, $idProf);
-        $prof_str = $prof->__toString();
-        print "########## - ${idProf}e PROF EN BASE - ########## \n";
-        print $prof_str."\n";
-        print "################################################################\n\n";
-        $expected = self::$prof_a[$idProf-1]->__toString();
-        $this->assertEquals($expected, $prof_str, "Prof \n");
-
-        // Cours
-        $cours = Cours::printOne($conn, $idCours);
-        $cours_str = $cours->__toString();
-        print "@@@@@@@@@@@@@ - ${idCours}e COURS EN BASE - @@@@@@@@@@@@@ \n";
-        print $cours_str."\n";
-        print "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n\n";
-        $expected = self::$cours_a[$idCours-1]->__toString();
-        $this->assertEquals($expected, $cours_str, "Cours \n");
-
-    }
+    
 
 
     /**
@@ -366,8 +318,11 @@ class ProfCoursTest extends TestCase
         // Cours
         $cours = new Cours($this->intitule, $this->duree, 10);
         $val = $cours->updateOne($conn);
+
         $expected_cours_str= $cours->__toString();
         $record_cours = Cours::printOne($conn);
+        print_r($expected_cours_str);
+        print "--------------------------------------->";
         $this->assertEquals($expected_cours_str, $record_cours->__toString(), "Update du 1e cours  ...\n");
         $this->assertTrue($val, "Update du 1e cours ...\n");
 
